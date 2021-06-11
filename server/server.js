@@ -9,15 +9,15 @@ const app = express();
 const PORT = 3000;
 
 // need to define mongoURL
-mongoose.connect(mongoURL, {
-    // options for the connect method to parse the URI
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    // sets the name of the DB that our collections are part of
-    dbName: 'votingDB'
-  })
-    .then(() => console.log('Connected to Mongo DB.'))
-    .catch(err => console.log(err));
+// mongoose.connect(mongoURL, {
+//     // options for the connect method to parse the URI
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     // sets the name of the DB that our collections are part of
+//     dbName: 'votingDB'
+//   })
+//     .then(() => console.log('Connected to Mongo DB.'))
+//     .catch(err => console.log(err));
 
 app.use(cookieParser());
 app.use(express.json())

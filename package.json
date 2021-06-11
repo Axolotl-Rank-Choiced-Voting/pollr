@@ -1,7 +1,7 @@
 {
-  "name": "cryptocurrency-watcher",
+  "name": "pollr",
   "version": "1.0.0",
-  "description": "Provides a simple dashboard for monitoring the price changes of cryptocurrencies",
+  "description": "A decision-making app using ranked choice voting",
   "main": "./client/index.jsx",
   "scripts": {
     "dev": "cross-env NODE_ENV=development; concurrently \"nodemon server/server.js\"  \"webpack-dev-server --open\"",

@@ -9,8 +9,13 @@ router.post('/', pollController.createPoll, (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    if(req.params.id !== 'style.css') res.cookie('poll', req.params.id);
-    res.status(200).sendFile(path.join(__dirname, '../../index.html'));
+    if(req.params.id === 'style.css') {
+        res.status(200).sendFile(path.join(__dirname, '../../style.css'));
+    }  
+    else {
+        res.cookie('poll', req.params.id);
+        res.status(200).sendFile(path.join(__dirname, '../../index.html'));
+    }
 });
 
 module.exports = router;

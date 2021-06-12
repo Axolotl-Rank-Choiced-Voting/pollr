@@ -21,13 +21,15 @@ function getIdCookie() {
 
     for(let i = 0; i < cookies.length; i++) {
         if(cookies[i].cookie === 'poll') {
+            document.cookie = 'poll=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             return cookies[i].value;
         }
     }
     return -1;
 }
 
-console.log(getIdCookie());
+console.log('Poll id from link: ', getIdCookie());
+console.log(document.cookie);
 
 const testFunction = async () => {
     const data = await fetch('/poll', { method: 'POST', 

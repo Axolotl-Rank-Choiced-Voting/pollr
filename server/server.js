@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const WSServer = require("./websocket.js");
+const connections = require('./routers/pollWebsocket.js'); // call this to setup the websocket routes
 
 const app = express();
 
@@ -38,6 +40,8 @@ app.get('/dist/bundle.js', (req, res) => {
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Routers
+const pollRouter = require('./routers/poll.js');
+app.use('/poll', pollRouter);
 
 
 /**

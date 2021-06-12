@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const WSServer = require("./websocket.js");
 
 const app = express();
 

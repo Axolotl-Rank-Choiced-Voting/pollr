@@ -23,9 +23,16 @@ const wsServer = {
             else dispatcher(msg.data, {conn, locals:{}}, ...routes[routeIndex].stops);
         })
 
-        // conn.on("close", (code, reason) => {
-        //     console.log("Connection closed")
-        // })
+        conn.on("close", (code, reason) => {
+            let routeIndex = -1;
+            for(let i = 0; i < routes.length; i++) {
+                if(routes[i].start === 'close') {
+                    routeIndex = i;
+                    break;
+                }
+            }
+            if(routeIndex !== -1) dispatcher({}, {conn, locals:{}}, ...routes[routeIndex].stops);
+        })
     }).listen(8001),
 
     use: (...stops) => {

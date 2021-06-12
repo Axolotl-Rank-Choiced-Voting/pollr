@@ -44,4 +44,10 @@ server.use('close_poll', pollController.closePoll, (req, res) => {
     })
 });
 
+server.use('close', (req, res) => {
+    Object.keys(connections).forEach(id => {
+        if(connections[id].conn.key === res.conn.key) delete connections[id];
+    });
+})
+
 module.exports = connections;

@@ -21,20 +21,13 @@ fetch('/poll', { method: 'POST',
         loaded = true;
     })
    
-const socketState = {
-    poll:null,
-    vote:false,
-    voteCount: 0,
-    selected: 0,
-}
-
 const Vote = (props) => {
     const [poll, setPoll] = useState(null);
     const [voted, setVoted] = useState(false);
     const [voteCount, setVoteCount] = useState(0);
     const [selected, setSelected] = useState(0);
 
-    console.log('Rerender: ', socketState);
+    console.log('Rerender: ', poll, voted, voteCount, selected);
 
     if(poll === null) {
         const listener = (type, data) => {
@@ -42,20 +35,18 @@ const Vote = (props) => {
             console.log('Data: ', data)
 
             if(type === 'subscribe') {
-                socketState.poll = data;
-                setPoll(socketState.poll);
+                setPoll(data);
                 // setVoteCount(); not implemented;
             }
             else if(type === 'vote_update') {
-                setVoteCount(++socketState.voteCount);
+                setVoteCount(voteCount+1);
             }
             else if(type === 'voted') {
-                socketState.voted = data.voted;
-                setVoted(socketState.voted);
+                setVoted(true);
+                setVoteCount(voteCount+1);
             }
             else if(type === 'winner') {
                 // route winner page
-                console.log(JSON.stringify(data.winner));
                 alert(`Winner was ${data.winner.option}!`);
             }
         }
@@ -100,7 +91,7 @@ const Vote = (props) => {
             <p>{voteCount} votes counted</p>
             <Box mb={3}>
                 <FormControl component='voteOptionsForm'>
-                    <RadioGroup name='voteRadioGroup' defaultValue={`${voted ? voted.vote : 0}`} onChange={(e) => setSelected(e.target.value)}>
+                    <RadioGroup name='voteRadioGroup' onChange={(e) => setSelected(e.target.value)}>
                         {pollOptions}
                     </RadioGroup>
                 </FormControl>

@@ -11,6 +11,24 @@ import React from 'react';
 // test code, will remove
 import pollSocket from './PollSocket.js';
 
+function getIdCookie() {
+    console.log(document.cookie);
+    const cookies = document.cookie.split(' ').map(c => {
+        let [cookie, value] = c.split('=');
+        if(value[value.length-1] === ';') value = value.substring(0, value.length-1);
+        return { cookie, value};
+    });
+
+    for(let i = 0; i < cookies.length; i++) {
+        if(cookies[i].cookie === 'poll') {
+            return cookies[i].value;
+        }
+    }
+    return -1;
+}
+
+console.log(getIdCookie());
+
 const testFunction = async () => {
     const data = await fetch('/poll', { method: 'POST', 
     headers: {

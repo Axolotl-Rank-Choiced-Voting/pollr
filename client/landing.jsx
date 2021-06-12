@@ -3,6 +3,9 @@ import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import { Link } from 'react-router-dom';
 
 /*
@@ -18,11 +21,17 @@ export default function Landing(props) {
   // total number of poll candidates
   let [totalOptions, setTotalOptions] = useState(2);
   // names of poll candidates
-  let [optionNames, setOptionNames] = useState(['Option 1', 'Option 2']);
+  let [optionNames, setOptionNames] = useState([]);
 
   // validate that at least two poll candidates exist
   function validateForm() {
-    return totalOptions >= 2;
+    let validCandidates = 0;
+    optionNames.forEach(e => {
+      if (e !== null
+       || e !== undefined
+       || e !== '') validCandidates += 1;
+    });
+    return validCandidates >= 2;
   }
 
   function handleSubmit(event) {
@@ -32,21 +41,42 @@ export default function Landing(props) {
   const optionsArray = [];
 
   for (let i = 0; i < totalOptions; i += 1) {
+    // create delete icon for all options if there are more than 2 options
     let deleteIcon = totalOptions > 2 ? true : false;
     optionsArray.push(
       <Box mb={3}>
-        <div>
+        <span>
           <TextField
-            key={[i]}
+            key={`OptionText${i}`}
             type="text"
+            value={optionNames[`${i}`]}
             onChange={(e) => {
-              optionNames[`${i}`] = e.target.value;
-              setOptionNames(optionNames);
+              let newOptions = [...optionNames]
+              newOptions[`${i}`] = e.target.value;
+              setOptionNames(newOptions);
             }}
             label={`Option ${i + 1}`}
             variant="outlined"
           />
-        </div>
+        </span>
+        {deleteIcon && <span>
+          <Tooltip title="Delete Poll Option">
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                let newOptions = [...optionNames];
+                newOptions.splice(`${i}`, 1);
+                setTotalOptions(totalOptions -= 1);
+                setOptionNames(newOptions);
+              }}
+              // remove delete icon from tab selection cycle
+              tabindex='-1'
+              >
+              <DeleteIcon/>
+            </IconButton>
+          </Tooltip>
+        </span>
+        }
       </Box>
     )
   }

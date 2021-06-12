@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 /*
 Landing page accessible only to logged in user
@@ -22,6 +22,8 @@ export default function Landing(props) {
   let [totalOptions, setTotalOptions] = useState(2);
   // names of poll candidates
   let [optionNames, setOptionNames] = useState([]);
+  // redirect
+  const [redirect, setRedirect] = useState(null);
 
   // validate that at least two poll candidates exist
   function validateForm() {
@@ -81,10 +83,32 @@ export default function Landing(props) {
     )
   }
 
-  // websocket logic goes here?
-  // useEffect(() => {
-    
-  // });
+  const createPoll = () => {
+    // fetch request to the server on the 'poll' route, method is post, body: pollName, optionsNames, userId
+    fetch('/poll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: 1234123 , pollName, optionNames})
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Created poll: ', data);
+        setRedirect(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+  }
+
+  if(redirect) return (
+    <Redirect
+      to={{
+        pathname: '/vote', 
+        state: { userId:1234123, pollId:redirect.pollId, pollLink:redirect.link, admin:redirect.admin }
+      }}
+    />);
 
   return (
     <div>
@@ -118,7 +142,7 @@ export default function Landing(props) {
           </Button>
         </div>
         <Button
-          onClick={() => {alert('clicked')}}
+          onClick={() => createPoll()}
           disabled={!validateForm()}
           variant="contained"
         >

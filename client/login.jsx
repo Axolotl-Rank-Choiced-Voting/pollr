@@ -61,6 +61,15 @@ export default function Login() {
       >
         Login
       </Button>
+      <Button
+        component={Link}
+        to="/vote"
+        type="submit"
+        disabled={!validateForm()}
+        variant="contained"
+      >
+        Testing Vote
+      </Button>
     </form>
   );
 }

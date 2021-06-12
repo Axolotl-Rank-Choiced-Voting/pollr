@@ -35,8 +35,9 @@ userController.verifyUser = async (req, res, next) => {
       //(find) checks for user with input username
       const user = await models.User.find({username: username});
       //compare plaintext input password with password in db
+      const hashedPassword = user[0].password;
       console.log('user', user)
-      bcrypt.compare(password, user[0].password, (err, results) => {
+      bcrypt.compare(password, hashedPassword, (err, results) => {
         if (err) console.log(`bcrypt error ${err}`)
         res.locals.verified = results;
         console.log('results', results);

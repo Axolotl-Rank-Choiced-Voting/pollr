@@ -1,38 +1,40 @@
 const ws = require("nodejs-websocket");
 const pollController = require('./controllers/pollController.js');
 
-const connections = [];
+const connections = {};
 
 const WSServer = ws.createServer((conn) => {
-    connections.push({
-        conn,
-        polls: {},
-        id: null,
-        voted: {},
-    })
 
     conn.on("text", (str) => {
         const msg = JSON.parse(str);
         msg.data.conn = conn;
-        
-        let connIndex = 0;
-        for(; connIndex < connections.length; connIndex++) {
-            if(connections[connIndex].conn === conn) break;
-        }
+        const userId = msg.data.userId;
 
         console.log('Received: ' + msg.type);
         if(msg.type === 'get') {
-            connections[connIndex].polls[msg.data.pollId] = true;
-            connections[connIndex].voted[msg.data.pollId] = false;
-            connections[connIndex].userId = msg.data.userId;
+            if(!connections[userId]) {
+                connections[userId] = {
+                    conn,
+                    userId,
+                    polls: {},
+                    voted: {},
+                } 
+            }           
+
+            connections[userId].polls[msg.data.pollId] = true;
+            connections[userId].voted[msg.data.pollId] = false;
+            connections[userId].userId = userId;
+            connections[userId].conn = conn;
+
             dispatcher(msg.data, {locals:{}}, pollController.getInformation, (req, res) => {
                 conn.send(JSON.stringify({ type:'get', data: {...res.locals}}));
             });
         }
         else if(msg.type === 'vote') {
             dispatcher(msg.data, {locals:{}}, pollController.addVote, (req, res) => {
-                connections[connIndex].voted[req.pollId] = true;
-                connections.forEach(connEl => {
+                connections[userId].voted[req.pollId] = true;
+                Object.keys(connections).forEach(id => {
+                    const connEl = connections[id];
                     if(connEl.conn === conn) {
                         conn.send(JSON.stringify({ type:'voted', data: { pollId: req.pollId, voted:true}}));
                     }
@@ -44,7 +46,8 @@ const WSServer = ws.createServer((conn) => {
         }
         else if(msg.type === 'close_poll') {
             dispatcher(msg.data, {locals:{}}, pollController.closePoll, (req, res) => {
-                connections.forEach(connEl => {
+                Object.keys(connections).forEach(id => {
+                    const connEl = connections[id];
                     if(connEl.polls[req.pollId]) {
                         connEl.conn.send(JSON.stringify({type:'winner', data: { pollId: req.pollId, winner: res.locals }}));
                         delete connEl.polls[req.pollId];

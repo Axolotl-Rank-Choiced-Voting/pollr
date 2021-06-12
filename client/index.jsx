@@ -9,7 +9,8 @@ import React from 'react';
 
 
 // test code, will remove
-const wbURL = 'ws://localhost:8001/';
+import pollSocket from './PollSocket.js';
+
 const testFunction = async () => {
     const data = await fetch('/poll', { method: 'POST', 
     headers: {
@@ -17,50 +18,42 @@ const testFunction = async () => {
     }})
     .then(data => data.json())
     
-    console.log(data);
-    const socket = new WebSocket(wbURL);
-    socket.onopen = (e) => socket.send(JSON.stringify({type:'get', 
-        data: {
-            userId: 12342134,
-            pollId: data.pollId,
-        }
-    }));
+    const connected = await pollSocket.connect();
+    if(connected) console.log('Connected to websocket server');
 
-    socket.onmessage = (e) => {
-        const msg = JSON.parse(e.data);
+    console.log('Created poll: ', data);
+    const id = pollSocket.addListener((type, data) => {
         console.log('Got message: ')
-        if(msg.type === 'get') {
-            console.log(msg.type);
-            console.log(msg.data);
-            socket.send(JSON.stringify({
-                type: 'vote',
-                data: {
-                    userId: 12342134,
-                    pollId: data.pollId,
-                    vote: 1,
-                }
-            }));
+        if(type === 'get') {
+            console.log(type);
+            console.log(data);
+            pollSocket.sendEvent('vote', {
+                userId: 12342134,
+                pollId: data.pollId,
+                vote: 1,
+            });
         }
-        else if(msg.type === 'voted') {
-            console.log(msg.type);
-            console.log(msg.data);
-            socket.send(JSON.stringify({
-                type: 'close_poll',
-                data: {
-                    userId: 12342134,
-                    pollId: data.pollId,
-                }
-            }));
+        else if(type === 'voted') {
+            console.log(type);
+            console.log(data);
+            pollSocket.sendEvent('close_poll', {
+                userId: 12342134,
+                pollId: data.pollId,
+            });
         }
-        else if(msg.type === 'vote_update') {
+        else if(type === 'vote_update') {
             
         }
-        else if(msg.type === 'winner') {
-            console.log(msg.type);
-            console.log(msg.data);
-            socket.close();
+        else if(type === 'winner') {
+            console.log(type);
+            console.log(data);
         }
-    }
+    });
+
+    pollSocket.sendEvent('get', { 
+        userId: 12342134,
+        pollId: data.pollId,
+    });    
 }
 
 testFunction();

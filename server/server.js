@@ -39,6 +39,8 @@ app.get('/dist/bundle.js', (req, res) => {
 //app.use(express.static(path.join(__dirname, '../dist')));
 
 // Routers
+const pollRouter = require('./routers/poll.js');
+app.use('/poll', pollRouter);
 
 
 /**

@@ -2,11 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
+import { Link } from 'react-router-dom';
 
 /*
-Login page allows user to log in, or redirects them to
-the sign up page
+Login page allows user to log in, or allows them to
+navigate to the sign up page
 */
 
 export default function Login() {
@@ -24,29 +25,36 @@ export default function Login() {
 
   return (
     <form>
-      <div>
-        <TextField
-          onSubmit={handleSubmit}
-          type="text"
-          value={username}
-          onChange={(e) => setUserName(e.target.value)}
-          label="username"
-          variant="outlined"
-        />
-      </div>
-      <div>
-        <TextField
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          label="password"
-          variant="outlined"
-        />
-      </div>
-      <Link href="#" color="inherit">
+      <h1>Log In</h1>
+      <Box mb={3}>
+        <div>
+          <TextField
+            onSubmit={handleSubmit}
+            type="text"
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
+            label="username"
+            variant="outlined"
+          />
+        </div>
+      </Box>
+      <Box mb={3}>
+        <div>
+          <TextField
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            label="password"
+            variant="outlined"
+          />
+        </div>
+      </Box>
+      <a href="#">
         Sign Up
-      </Link>
+      </a>
       <Button
+        component={Link}
+        to="/landing"
         type="submit"
         disabled={!validateForm()}
         variant="contained"

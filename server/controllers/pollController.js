@@ -48,7 +48,7 @@ pollController.addVote = (req, res, next) => {
         error: 'Bad poll id request',
     });
 
-    const vote = { id:req.userId, vote:req.vote };
+    const vote = { userId:req.userId, vote:req.vote };
     activePolls[req.pollId].responses.push({ userId: req.userId, vote:req.vote });
     res.locals = vote;
     return next();

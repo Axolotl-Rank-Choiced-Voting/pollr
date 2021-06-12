@@ -4,6 +4,7 @@ const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const WSServer = require("./websocket.js");
+const connections = require('./routers/pollWebsocket.js'); // call this to setup the websocket routes
 
 const app = express();
 

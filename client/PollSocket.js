@@ -7,7 +7,7 @@ class PollSocket {
 
             this.socket.onmessage = (e) => {
                 const msg = JSON.parse(e.data);
-                this.listeners.forEach(l => l.callback(msg.type, msg.data));
+                this.listeners.forEach(l => l.callback(msg.type, msg.data, l.id));
             }
 
             return new Promise((resolve, reject) => {

@@ -35,7 +35,7 @@ app.get('/dist/bundle.js', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../dist/bundle.js'));
 });
 
-//app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Routers
 

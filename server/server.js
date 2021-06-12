@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const WSServer = require("./websocket.js");
+const connections = require("./routers/pollWebsocket.js"); // call this to setup the websocket routes
 
 const cookieController = require("../controllers/cookieController");
 const userController = require("../controllers/userController");
@@ -39,7 +41,7 @@ app.get("/dist/bundle.js", (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, "../dist/bundle.js"));
 });
 
-//app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, "../dist")));
 
 app.get("/login", sessionController.isLoggedIn, (req, res) => {
   if (res.locals.isLoggedIn) {
@@ -82,6 +84,8 @@ app.post(
 // });
 
 // Routers
+const pollRouter = require("./routers/poll.js");
+app.use("/poll", pollRouter);
 
 /**
  * 404 handler

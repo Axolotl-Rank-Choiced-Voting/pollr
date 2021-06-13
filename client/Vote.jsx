@@ -7,8 +7,14 @@ function handleSubmit(event) {
     event.preventDefault();
 }
 
+const randomID = Math.floor(Math.random() * 1000000);
+
 const Vote = (props) => {
-    props = props.location.state;
+
+    if(props.match.params.pollId){
+        props = { pollId:props.match.params.id, userId:'guest'+randomID }
+    }
+    else props = props.location.state;
 
     const [poll, setPoll] = useState(null);
     const [voted, setVoted] = useState(false);

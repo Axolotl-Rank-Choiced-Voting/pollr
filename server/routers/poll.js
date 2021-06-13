@@ -13,7 +13,6 @@ router.get('/:id', (req, res) => {
         res.status(200).sendFile(path.join(__dirname, '../../style.css'));
     }  
     else {
-        res.cookie('poll', req.params.id);
         res.status(200).sendFile(path.join(__dirname, '../../index.html'));
     }
 });

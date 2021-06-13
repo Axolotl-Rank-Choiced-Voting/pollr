@@ -7,21 +7,9 @@ function handleSubmit(event) {
     event.preventDefault();
 }
 
-// test function
-let loaded = false;
-let pollData;
-fetch('/poll', { method: 'POST', 
-    headers: {
-        'Content-Type': 'Application/JSON'
-    }})
-    .then(data => data.json())
-    .then(data => {
-        console.log('Created poll: ', data);
-        pollData = data;
-        loaded = true;
-    })
-   
 const Vote = (props) => {
+    props = props.location.state;
+
     const [poll, setPoll] = useState(null);
     const [voted, setVoted] = useState(false);
     const [voteCount, setVoteCount] = useState(0);
@@ -52,23 +40,18 @@ const Vote = (props) => {
         }
 
         function connect() {
-            if(loaded){
-
             if(!pollSocket.connected) {
                 pollSocket.connect()
                     .then(() => {
                         pollSocket.addListener(listener);
                         // pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
-                        pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:pollData.pollId});
+                        pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
                     });
             }
             // else {
             //     pollSocket.addListener(listener);
             //     pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
             // }
-
-
-            } else setTimeout(this.connect.bind(this), 100);
         }
         connect();
     }
@@ -98,14 +81,14 @@ const Vote = (props) => {
             </Box>
 
             <Button
-                onClick={() => {pollSocket.sendEvent('vote', {userId:props.userId, pollId:pollData.pollId, vote:selected})}}
+                onClick={() => {pollSocket.sendEvent('vote', {userId:props.userId, pollId:props.pollId, vote:selected})}}
                 // disabled={!validateForm()}
                 variant="contained">
                 Vote
             </Button>
             
             {props.admin && <Button
-                onClick={() => {pollSocket.sendEvent('close_poll', {userId:props.userId, pollId:pollData.pollId})}}
+                onClick={() => {pollSocket.sendEvent('close_poll', {userId:props.userId, pollId:props.pollId})}}
                 // disabled={!validateForm()}
                 variant="contained"
             >

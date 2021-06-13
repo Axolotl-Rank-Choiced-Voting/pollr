@@ -9,17 +9,13 @@ let currIndex = 0;
 // Standard server middleware
 
 pollController.createPoll = (req, res, next) => {
+    console.log(req.body);
     activePolls[currIndex] = {
             poll: {
             method: 'rankedChoice',
-            question: 'Where do you want to go for dinner?',
-            options: [
-                'Korean BBQ',
-                'Hot pot',
-                'Bar food',
-                'Salads and Fixings',
-            ],
-            creatorId: 12342134,
+            question: req.body.pollName,
+            options: req.body.optionNames,
+            creatorId: req.body.userId,
             pollId: currIndex,
         },
         responses: [],

@@ -14,7 +14,7 @@ export default function App() {
         <Route path="/" component={ Login } exact />
         {/* <Route path="/landing" component={ Landing } exact /> */}
         <Route path="/landing" render={(props) => <Landing value="test" />} exact />
-        <Route path="/vote" render={(props) => <Vote pollId='0' userId='12342134' admin={true}/>} exact />
+        <Route path="/vote" render={(props) => <Vote {...props}/>} exact />
       </Switch>
     </main>
   );

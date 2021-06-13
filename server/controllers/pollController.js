@@ -17,6 +17,7 @@ pollController.createPoll = (req, res, next) => {
             options: req.body.optionNames,
             creatorId: req.body.userId,
             pollId: currIndex,
+            voteCount: 0,
         },
         responses: [],
     }
@@ -46,6 +47,7 @@ pollController.addVote = (req, res, next) => {
 
     const vote = { userId:req.userId, vote:req.vote };
     activePolls[req.pollId].responses.push({ userId: req.userId, vote:req.vote });
+    activePolls[req.pollId].poll.voteCount++;
     res.locals = vote;
     return next();
 }

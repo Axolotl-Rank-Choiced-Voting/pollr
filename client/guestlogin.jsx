@@ -19,7 +19,11 @@ export default function GuestLogIn(props) {
       <Redirect
         to={{
           pathname: "/vote",
-          state: { pollId: props.match.params.pollId, userId: guestName, guest:true },
+          state: {
+            pollId: props.location.state.pollId,
+            userId: guestName,
+            guest: true,
+          },
         }}
       />
     );
@@ -31,7 +35,7 @@ export default function GuestLogIn(props) {
 
   return (
     <div>
-      <form>
+      <form className="loginPage">
         <Box m={2}>
           <div>
             <TextField
@@ -44,13 +48,15 @@ export default function GuestLogIn(props) {
             />
           </div>
         </Box>
-        <Button
-          onClick={() => setGoToVote(true)}
-          disabled={!validateForm()}
-          variant="contained"
-        >
-          Continue to Poll
-        </Button>
+        <div className="buttonDivLogin">
+          <Button
+            onClick={() => setGoToVote(true)}
+            disabled={!validateForm()}
+            variant="contained"
+          >
+            Continue to Poll
+          </Button>
+        </div>
       </form>
     </div>
   );

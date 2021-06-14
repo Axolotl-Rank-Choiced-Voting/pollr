@@ -16,25 +16,25 @@ const Vote = (props) => {
       const listener = (type, data) => {
           if(data.pollId != props.pollId) return;
           console.log('Got event: ', type, data);
+          console.log('state:', state);
 
           if(type === 'subscribe') {
               state = {poll:data, vote: { voted:false, count:data.voteCount }};
               setState({...state});
              }
           else if(type === 'joined') {
-            console.log('state:', state);
-            console.log('joined array:', state.poll.joined);
             state.poll.joined.push(data.userId);
             setState({...state});
             }
           else if(type === 'vote_update') {
               state.vote.count++;
-              // state.vote.responses;
+              state.poll.responses.push(data.vote);
               setState({...state});
           }
           else if(type === 'voted') {
               state.vote.count++;
               state.vote.voted = true;
+              state.poll.responses.push(data.vote);
               setState({...state});
           }
           else if(type === 'winner') {
@@ -84,12 +84,26 @@ const Vote = (props) => {
   const voteParticipants = [];
   
   for (let i = 0; i < state.poll.joined.length; i += 1) {
-      voteParticipants.push(
-        <div>{`${state.poll.joined[i]}`}</div>
-      )
-  }
+      // if participants have voted say they have voted
+      let found = false;
+      for (let j = 0; j < state.poll.responses.length; j++) {
+        if (state.poll.responses[j].userId === state.poll.joined[i]) {
+            found = true;
+            break;
+        }
+      }
 
-  console.log(voteParticipants);
+      if (found){
+        // if they have, add div that says so
+        voteParticipants.push(
+            <div>{`${state.poll.joined[i]} has voted`}</div>
+        )
+      } else {
+        voteParticipants.push(
+            <div>{`${state.poll.joined[i]}`}</div>
+        )
+      }
+  }
 
   return (
       <div>
@@ -97,7 +111,7 @@ const Vote = (props) => {
           {props.admin &&
           <div>
             <p>Poll link: </p>
-            <textarea ref={textAreaRef} value={`http://${props.pollLink}`} readonly>
+            <textarea ref={textAreaRef} value={`${props.pollLink}`} readonly>
             </textarea>
             <Button
             onClick={copyToClipboard}

@@ -39,7 +39,7 @@ server.use("vote", pollController.addVote, (req, res) => {
       res.conn.send(
         JSON.stringify({
           type: "voted",
-          data: { pollId: req.pollId, voted: true },
+          data: { pollId: req.pollId, vote: res.locals },
         })
       );
     } else if (connEl.polls[req.pollId]) {

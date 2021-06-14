@@ -18,29 +18,38 @@ async function getLastIndex() {
 getLastIndex();
 
 pollController.createPoll = async (req, res, next) => {
-  console.log(req.body);
+  try
+  {
+    console.log(req.body);
 
-  await Poll.create({
-    method: "highestVote",
-    question: req.body.pollName,
-    options: req.body.optionNames,
-    creatorId: req.body.userId.toString(),
-    pollId: currIndex.toString(),
-    voteCount: 0,
-    joined: [],
-    responses: [],
-    winner: {
-      option: "",
-      count: 0,
-    },
-    active: true,
-  });
+    await Poll.create({
+      method: "highestVote",
+      question: req.body.pollName,
+      options: req.body.optionNames,
+      creatorId: req.body.userId,
+      pollId: currIndex.toString(),
+      voteCount: 0,
+      joined: [],
+      responses: [],
+      winner: {
+        option: "",
+        count: 0,
+      },
+      active: true,
+    });
 
-  res.locals.pollId = currIndex;
-  res.locals.link = serverLink + currIndex;
-  res.locals.admin = true;
-  currIndex++;
-  return next();
+    res.locals.pollId = currIndex;
+    res.locals.link = serverLink + currIndex;
+    res.locals.admin = true;
+    currIndex++;
+    return next();
+  }
+  catch(err) {
+    return next({
+      log: 'Error in pollController.createPoll: ' + err,
+      message: {error: 'Database error: ' + err}
+    });
+  }
 };
 
 // Websocket server middleware

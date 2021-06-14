@@ -36,5 +36,12 @@ export default function PollsHistoryContainer(props) {
   }
   console.log("pollsDisplay", pollsDisplay);
 
-  return <div>{pollsDisplay}</div>;
+  return (
+    <div id="pollsHistoryContainer">
+      <center>
+        <h1>Past Polls</h1>
+      </center>
+      {pollsDisplay}
+    </div>
+  );
 }

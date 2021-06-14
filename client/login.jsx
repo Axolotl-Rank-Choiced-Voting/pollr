@@ -16,7 +16,7 @@ export default function Login(props) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(null);
-
+  console.log(props.location.state);
   // form validation; username and password need to be > one char
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -66,7 +66,7 @@ export default function Login(props) {
 
   // check if redirect has data attached, if so, redirect to path provided in redirect.tabs
   if (redirect) {
-    console.log(redirect.tabs)
+    console.log(redirect.tabs);
     if (props.match.params.pollId) {
       return (
         <Redirect
@@ -89,7 +89,7 @@ export default function Login(props) {
 
   return (
     <div>
-      <form>
+      <form className="loginPage">
         <h1>Log In</h1>
         <Box m={2}>
           <div>
@@ -114,22 +114,24 @@ export default function Login(props) {
             />
           </div>
         </Box>
-        <Button
-          onClick={() => signUp()}
-          disabled={!validateForm()}
-          variant="contained"
-        >
-          Sign Up
-        </Button>
-        <Button
-          onClick={() => login()}
-          disabled={!validateForm()}
-          variant="contained"
-        >
-          Login
-        </Button>
+        <div className="buttonDivLogin">
+          <Button
+            onClick={() => signUp()}
+            disabled={!validateForm()}
+            variant="contained"
+          >
+            Sign Up
+          </Button>
+          <Button
+            onClick={() => login()}
+            disabled={!validateForm()}
+            variant="contained"
+          >
+            Login
+          </Button>
+        </div>
       </form>
-        {props.match.params.pollId && <GuestLogIn {...props} />}
+      {props.location.state.pollId && <GuestLogIn {...props} />}
     </div>
   );
 }

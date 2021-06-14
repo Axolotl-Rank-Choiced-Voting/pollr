@@ -1,0 +1,126 @@
+body {
+  font-family: Montserrat;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.loginPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 480px;
+  box-shadow: 0 0 5px black;
+  border-radius: 2px;
+}
+
+.buttonDivLogin {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  margin-bottom: 10px;
+}
+
+#loginPage > h1 {
+  align-self: center;
+  margin: 5px 5px;
+}
+
+#landingPage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 80%;
+}
+
+#pollsHistoryContainer {
+  max-height: 50vh;
+  overflow: scroll;
+  width: 480px;
+}
+#pollCreator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-radius: 8px;
+  box-shadow: 0 0 10px grey;
+  width: 360px;
+}
+
+.voteContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 75%;
+  box-shadow: 0 0 5px black;
+}
+
+.linkContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+}
+
+.voteRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.MuiFormGroup-root {
+  margin-left: 30px;
+  width: 210px;
+}
+
+.participantContainer {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 6px black;
+  width: 240px;
+  margin-bottom: 20px;
+}
+
+.participantDiv {
+  border-radius: 3px;
+  margin: 4px 4px;
+  padding: 4px 4px;
+  box-shadow: 0 0 3px black;
+}
+
+.optionsLabel {
+  border-radius: 3px;
+  margin: 4px 4px;
+  box-shadow: 0 0 3px black;
+  width: 200px;
+}
+#pollsHistoryContainer {
+  border-radius: 8px;
+  box-shadow: 0 0 8px grey;
+}
+
+.pollsHistoryDisplay {
+  border-radius: 8px;
+  box-shadow: 0 0 8px grey;
+  height: 20vh;
+  min-height: 150px;
+  margin: 20px 20px;
+}
+
+.pollsHistoryDisplayContents {
+  margin: 20px 20px;
+}

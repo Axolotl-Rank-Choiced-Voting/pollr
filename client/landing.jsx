@@ -122,44 +122,46 @@ export default function Landing(props) {
     );
 
   return (
-    <div>
-      <h1>Create Poll</h1>
-      <div>
-        <a href="#">Log Out</a>
-      </div>
-      <form>
-        <Box m={2}>
-          <div>
-            <TextField
-              id="pollname"
-              onSubmit={handleSubmit}
-              type="text"
-              value={pollName}
-              onChange={(e) => setPollName(e.target.value)}
-              label="Poll Name"
-              variant="outlined"
-            />
-          </div>
-        </Box>
-        {[optionsArray]}
+    <div id="landingPage">
+      <div id="pollCreator">
+        <h1>Create Poll</h1>
         <div>
-          <Button
-            onClick={() => {
-              setTotalOptions((totalOptions += 1));
-            }}
-            variant="outlined"
-          >
-            +
-          </Button>
+          <a href="#">Log Out</a>
         </div>
-        <Button
-          onClick={() => createPoll()}
-          disabled={!validateForm()}
-          variant="contained"
-        >
-          Start Poll
-        </Button>
-      </form>
+        <form>
+          <Box m={2}>
+            <div>
+              <TextField
+                id="pollname"
+                onSubmit={handleSubmit}
+                type="text"
+                value={pollName}
+                onChange={(e) => setPollName(e.target.value)}
+                label="Poll Name"
+                variant="outlined"
+              />
+            </div>
+          </Box>
+          {[optionsArray]}
+          <div>
+            <Button
+              onClick={() => {
+                setTotalOptions((totalOptions += 1));
+              }}
+              variant="outlined"
+            >
+              +
+            </Button>
+          </div>
+          <Button
+            onClick={() => createPoll()}
+            disabled={!validateForm()}
+            variant="contained"
+          >
+            Start Poll
+          </Button>
+        </form>
+      </div>
       <PollsHistoryContainer userId={props.location.state.userId} />
     </div>
   );

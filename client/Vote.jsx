@@ -18,11 +18,12 @@ const Vote = (props) => {
           console.log('Got event: ', type, data);
 
           if(type === 'subscribe') {
-              state = {poll:data, vote: { voted:false, count:data.voteCount }};
+              state = {poll:data, vote: { voted:false, count:data.voteCount, responses:data.responses }};
               setState({...state});
           }
           else if(type === 'vote_update') {
               state.vote.count++;
+              state.vote.responses = 'test';
               setState({...state});
           }
           else if(type === 'voted') {
@@ -79,7 +80,7 @@ const Vote = (props) => {
           {props.admin &&
           <div>
             <p>Poll link: </p>
-            <textarea ref={textAreaRef} value={`${props.pollLink}`} readonly>
+            <textarea ref={textAreaRef} value={`http://${props.pollLink}`} readonly>
             </textarea>
             <Button
             onClick={copyToClipboard}
@@ -90,6 +91,7 @@ const Vote = (props) => {
           </div>
           }
           <p>{state.vote.count} votes counted</p>
+          <p>state responses: {state.vote.responses}</p>
           <Box mb={3}>
               <FormControl component='voteOptionsForm'>
                   <RadioGroup name='voteRadioGroup' onChange={(e) => setSelected(e.target.value)}>

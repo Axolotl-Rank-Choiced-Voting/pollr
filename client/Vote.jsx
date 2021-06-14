@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Box, FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import pollSocket from './PollSocket.js';
 
@@ -9,6 +9,8 @@ const Vote = (props) => {
 
     let [state, setState] = useState(null);
     const [selected, setSelected] = useState(-1);
+    // copy to clipboard functionality
+    const textAreaRef = useRef(null);
 
     if(state === null) {
       const listener = (type, data) => {
@@ -63,9 +65,30 @@ const Vote = (props) => {
       </div>
   )});
 
+  function copyToClipboard(e) {
+    textAreaRef.current.select();
+    document.execCommand('copy');
+    // This is just personal preference.
+    // I prefer to not show the whole text area selected.
+    e.target.focus();
+  };
+
   return (
       <div>
           <h1>{state.poll.question}</h1>
+          {props.admin &&
+          <div>
+            <p>Poll link: </p>
+            <textarea ref={textAreaRef} value={`${props.pollLink}`} readonly>
+            </textarea>
+            <Button
+            onClick={copyToClipboard}
+            variant="contained"
+            >
+                Copy Link
+            </Button>
+          </div>
+          }
           <p>{state.vote.count} votes counted</p>
           <Box mb={3}>
               <FormControl component='voteOptionsForm'>

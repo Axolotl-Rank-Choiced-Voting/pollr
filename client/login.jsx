@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import { Link, Redirect } from "react-router-dom";
 import Landing from "./landing.jsx";
-import GuestLogIn from "./guestlogin.jsx";
+// import GuestLogIn from "./guestlogin.jsx";
 
 /*
 Login page allows user to log in, or allows them to

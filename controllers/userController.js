@@ -19,6 +19,7 @@ userController.createUser = (req, res, next) => {
       //create new user with username and pass
       const newUser = await models.User.create(user);
       //check on this later
+      res.locals.verified = newUser._id;
       res.locals.user = newUser._id;
       next();
     });

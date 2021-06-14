@@ -89,7 +89,11 @@ export default function Landing(props) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: props.location.state.userId, pollName, optionNames }),
+      body: JSON.stringify({
+        userId: props.location.state.userId,
+        pollName,
+        optionNames,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -111,7 +115,7 @@ export default function Landing(props) {
             pollId: redirect.pollId,
             pollLink: redirect.link,
             admin: redirect.admin,
-            guest: false
+            guest: false,
           },
         }}
       />
@@ -156,7 +160,7 @@ export default function Landing(props) {
           Start Poll
         </Button>
       </form>
-      <PollsHistoryContainer />
+      <PollsHistoryContainer userId={props.location.state.userId} />
     </div>
   );
 }

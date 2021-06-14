@@ -4,7 +4,7 @@ const pollController = require("../controllers/pollController.js");
 
 const router = express.Router();
 
-router.get("/", pollController.getPolls, (req, res) => {
+router.get("/list/:id", pollController.getPolls, (req, res) => {
   res.status(200).json([...res.locals.polls]);
 });
 

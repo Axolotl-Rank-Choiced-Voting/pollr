@@ -1,4 +1,4 @@
-const { Poll } = require("../../models/pollModels.js");
+const { User, Poll } = require("../../models/pollModels.js");
 const mongoose = require("mongoose");
 
 const pollController = {};
@@ -33,6 +33,7 @@ pollController.createPoll = async (req, res, next) => {
     creatorId: req.body.userId.toString(),
     pollId: currIndex.toString(),
     voteCount: 0,
+    joined: [],
     responses: [],
     winner: {
       option: "",
@@ -52,12 +53,21 @@ pollController.createPoll = async (req, res, next) => {
 
 pollController.getInformation = async (req, res, next) => {
   const currPoll = await Poll.findOne({ pollId: req.pollId });
-  if (!currPoll)
-    return next({
+  if (!currPoll) return next({
       error: "Bad poll id request",
-    });
-
+  });
+  
+  currPoll.joined.push(req.userId);
+  await currPoll.save();
   res.locals = currPoll._doc;
+
+  if(!req.guest) {
+    const user = await User.findOne({username: req.userId})
+    if(!user) return next({error: 'couldnt find user name: ' + req.userId});
+    user.pollsList.push(currPoll._id);
+    await user.save();
+  }
+
   return next();
 };
 

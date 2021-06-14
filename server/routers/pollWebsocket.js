@@ -16,7 +16,19 @@ server.use("subscribe", pollController.getInformation, (req, res) => {
 
   connections[userId].polls[req.pollId] = true;
   connections[userId].voted[req.pollId] = false;
-  res.conn.send(JSON.stringify({ type: "subscribe", data: { ...res.locals } }));
+  Object.keys(connections).forEach((id) => {
+    const connEl = connections[id];
+    if (connEl.conn === res.conn) {
+      res.conn.send(JSON.stringify({ type: "subscribe", data: { ...res.locals } }));
+    } else if (connEl.polls[req.pollId]) {
+      connEl.conn.send(
+        JSON.stringify({
+          type: "joined",
+          data: { pollId: req.pollId, userId: req.userId },
+        })
+      );
+    }
+  });
 });
 
 server.use("vote", pollController.addVote, (req, res) => {

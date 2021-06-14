@@ -16,7 +16,6 @@ Contains poll creation options
 */
 
 export default function Landing(props) {
-  //console.log('props: ', props);
   // poll title
   const [pollName, setPollName] = useState("");
   // total number of poll candidates
@@ -90,7 +89,7 @@ export default function Landing(props) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: 1234123, pollName, optionNames }),
+      body: JSON.stringify({ userId: props.location.state.userId, pollName, optionNames }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -108,10 +107,11 @@ export default function Landing(props) {
         to={{
           pathname: "/vote",
           state: {
-            userId: 1234123,
+            userId: props.location.state.userId,
             pollId: redirect.pollId,
             pollLink: redirect.link,
             admin: redirect.admin,
+            guest: false
           },
         }}
       />

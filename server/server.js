@@ -59,7 +59,7 @@ app.post(
   (req, res) => {
     console.log("end of signup route");
     //response includes 'home' to direct frontend to homepage
-    res.status(200).json({ tabs: "/landing" });
+    res.status(200).json({ tabs: "/landing", userId:res.locals.userId });
   }
 );
 
@@ -71,7 +71,7 @@ app.post(
   (req, res) => {
     if (res.locals.verified) {
       //redirect user in verifUser here
-      res.status(200).json({ tabs: "/landing" });
+      res.status(200).json({ tabs: "/landing", userId:res.locals.userId });
     } else {
       res
         .status(200)

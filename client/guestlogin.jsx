@@ -19,7 +19,7 @@ export default function GuestLogIn(props) {
       <Redirect
         to={{
           pathname: "/vote",
-          state: { pollId: props.match.params.pollId, userId: guestName },
+          state: { pollId: props.match.params.pollId, userId: guestName, guest:true },
         }}
       />
     );

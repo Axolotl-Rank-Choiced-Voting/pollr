@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import { Link, Redirect } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useState } from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import { Link, Redirect } from "react-router-dom";
 
 /*
 Landing page accessible only to logged in user
@@ -28,10 +28,8 @@ export default function Landing(props) {
   // validate that at least two poll candidates exist
   function validateForm() {
     let validCandidates = 0;
-    optionNames.forEach(e => {
-      if (e !== null
-       || e !== undefined
-       || e !== '') validCandidates += 1;
+    optionNames.forEach((e) => {
+      if (e !== null || e !== undefined || e !== "") validCandidates += 1;
     });
     return validCandidates >= 2;
   }
@@ -53,7 +51,7 @@ export default function Landing(props) {
             type="text"
             value={optionNames[`${i}`]}
             onChange={(e) => {
-              let newOptions = [...optionNames]
+              let newOptions = [...optionNames];
               newOptions[`${i}`] = e.target.value;
               setOptionNames(newOptions);
             }}
@@ -61,68 +59,74 @@ export default function Landing(props) {
             variant="outlined"
           />
         </span>
-        {deleteIcon && <span>
-          <Tooltip title="Delete Poll Option">
-            <IconButton
-              aria-label="delete"
-              onClick={() => {
-                let newOptions = [...optionNames];
-                newOptions.splice(`${i}`, 1);
-                setTotalOptions(totalOptions -= 1);
-                setOptionNames(newOptions);
-              }}
-              // remove delete icon from tab selection cycle
-              tabindex='-1'
+        {deleteIcon && (
+          <span>
+            <Tooltip title="Delete Poll Option">
+              <IconButton
+                aria-label="delete"
+                onClick={() => {
+                  let newOptions = [...optionNames];
+                  newOptions.splice(`${i}`, 1);
+                  setTotalOptions((totalOptions -= 1));
+                  setOptionNames(newOptions);
+                }}
+                // remove delete icon from tab selection cycle
+                tabindex="-1"
               >
-              <DeleteIcon/>
-            </IconButton>
-          </Tooltip>
-        </span>
-        }
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </span>
+        )}
       </Box>
-    )
+    );
   }
 
   const createPoll = () => {
     // fetch request to the server on the 'poll' route, method is post, body: pollName, optionsNames, userId
-    fetch('/poll', {
-      method: 'POST',
+    fetch("/poll", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: 1234123 , pollName, optionNames})
+      body: JSON.stringify({ userId: 1234123, pollName, optionNames }),
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Created poll: ', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Created poll: ", data);
         setRedirect(data);
       })
       .catch((error) => {
-        console.error('Error:', error);
-      })
-  }
+        console.error("Error:", error);
+      });
+  };
 
-  if(redirect) return (
-    <Redirect
-      to={{
-        pathname: '/vote', 
-        state: { userId:1234123, pollId:redirect.pollId, pollLink:redirect.link, admin:redirect.admin }
-      }}
-    />);
+  if (redirect)
+    return (
+      <Redirect
+        to={{
+          pathname: "/vote",
+          state: {
+            userId: 1234123,
+            pollId: redirect.pollId,
+            pollLink: redirect.link,
+            admin: redirect.admin,
+          },
+        }}
+      />
+    );
 
   return (
     <div>
       <h1>Create Poll</h1>
       <div>
-      <a href="#">
-        Log Out
-      </a>
+        <a href="#">Log Out</a>
       </div>
       <form>
         <Box mb={3}>
           <div>
             <TextField
-              id='pollname'
+              id="pollname"
               onSubmit={handleSubmit}
               type="text"
               value={pollName}
@@ -132,10 +136,12 @@ export default function Landing(props) {
             />
           </div>
         </Box>
-        { [optionsArray] }
+        {[optionsArray]}
         <div>
           <Button
-            onClick={() => {setTotalOptions(totalOptions += 1)}}
+            onClick={() => {
+              setTotalOptions((totalOptions += 1));
+            }}
             variant="outlined"
           >
             +

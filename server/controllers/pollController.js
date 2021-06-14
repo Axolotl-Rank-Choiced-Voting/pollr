@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const pollController = {};
 
-const serverLink = "localhost:/3000/poll/";
+const serverLink = "http://localhost:8080/poll/";
 
 // const activePolls = {};
 

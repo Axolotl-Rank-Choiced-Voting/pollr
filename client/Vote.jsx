@@ -15,6 +15,7 @@ const Vote = (props) => {
 
     if(state === null) {
         const listener = (type, data) => {
+            if(data.pollId != props.pollId) return;
             console.log('Got event: ', type, data);
 
             if(type === 'subscribe') {
@@ -45,10 +46,10 @@ const Vote = (props) => {
                         pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
                     });
             }
-            // else {
-            //     pollSocket.addListener(listener);
-            //     pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
-            // }
+            else {
+                pollSocket.addListener(listener);
+                pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
+            }
         }
         connect();
     }

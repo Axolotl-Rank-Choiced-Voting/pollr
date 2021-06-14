@@ -30,24 +30,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, "../index.html"));
+  res.status(200).sendFile(path.join(__dirname, "../index.html"));
 });
 
 app.get("/style.css", (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, "../style.css"));
+  res.status(200).sendFile(path.join(__dirname, "../style.css"));
 });
 
 app.get("/dist/bundle.js", (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, "../dist/bundle.js"));
+  res.status(200).sendFile(path.join(__dirname, "../dist/bundle.js"));
 });
 
 app.use(express.static(path.join(__dirname, "../dist")));
 
 app.get("/login", sessionController.isLoggedIn, (req, res) => {
   if (res.locals.isLoggedIn) {
-    return res.status(200).json({ tabs: "home" });
+    res.status(200).json({ tabs: "/landing" });
   }
-  return res.status(200).json({ tabs: "login" });
+  res.status(200).json({ tabs: "/" });
 });
 
 //Authentication
@@ -57,8 +57,9 @@ app.post(
   cookieController.createCookie,
   sessionController.createSession,
   (req, res) => {
+    console.log("end of signup route");
     //response includes 'home' to direct frontend to homepage
-    return res.status(200).json({ tabs: "home" });
+    res.status(200).json({ tabs: "/landing" });
   }
 );
 
@@ -70,9 +71,11 @@ app.post(
   (req, res) => {
     if (res.locals.verified) {
       //redirect user in verifUser here
-      return res.status(200).json({ tabs: "home" });
+      res.status(200).json({ tabs: "/landing" });
     } else {
-      return res.status(200).json({ tabs: "login" });
+      res
+        .status(200)
+        .json({ tabs: "/login", message: "Invalid username or password" });
     }
   }
 );
@@ -91,7 +94,7 @@ app.use("/poll", pollRouter);
  * 404 handler
  */
 app.use("*", (req, res) => {
-  return res.status(404).send("Not Found");
+  res.status(404).send("Not Found");
 });
 
 /**
@@ -99,7 +102,7 @@ app.use("*", (req, res) => {
  */
 app.use((err, req, res, next) => {
   console.log("ERROR from global error handler", err.log);
-  return res.status(err.status || 500).send(err.message);
+  res.status(err.status || 500).send(err.message);
 });
 
 app.listen(PORT, () => {

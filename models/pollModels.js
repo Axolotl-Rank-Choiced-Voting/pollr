@@ -15,7 +15,8 @@ mongoose
     dbName: "Pollr",
   })
   .then(() => console.log("Connected to Mongo DB."))
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err))
+  console.log("Inside the Mongoose connection")
 
 const userSchema = new Schema({
   username: { type: String, required: true },

@@ -18,12 +18,18 @@ const Vote = (props) => {
           console.log('Got event: ', type, data);
 
           if(type === 'subscribe') {
-              state = {poll:data, vote: { voted:false, count:data.voteCount, responses:data.responses }};
+              state = {poll:data, vote: { voted:false, count:data.voteCount }};
               setState({...state});
-          }
+             }
+          else if(type === 'joined') {
+            console.log('state:', state);
+            console.log('joined array:', state.poll.joined);
+            state.poll.joined.push(data.userId);
+            setState({...state});
+            }
           else if(type === 'vote_update') {
               state.vote.count++;
-              state.vote.responses = 'test';
+              // state.vote.responses;
               setState({...state});
           }
           else if(type === 'voted') {
@@ -74,6 +80,17 @@ const Vote = (props) => {
     e.target.focus();
   };
 
+  // set up an array and for loop to display participants and vote status
+  const voteParticipants = [];
+  
+  for (let i = 0; i < state.poll.joined.length; i += 1) {
+      voteParticipants.push(
+        <div>{`${state.poll.joined[i]}`}</div>
+      )
+  }
+
+  console.log(voteParticipants);
+
   return (
       <div>
           <h1>{state.poll.question}</h1>
@@ -91,7 +108,10 @@ const Vote = (props) => {
           </div>
           }
           <p>{state.vote.count} votes counted</p>
-          <p>state responses: {state.vote.responses}</p>
+          <div>
+            <p>Poll participants:</p>
+            {voteParticipants}
+          </div>
           <Box mb={3}>
               <FormControl component='voteOptionsForm'>
                   <RadioGroup name='voteRadioGroup' onChange={(e) => setSelected(e.target.value)}>

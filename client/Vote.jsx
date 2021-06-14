@@ -51,87 +51,49 @@ const Vote = (props) => {
       connect();
   }
 
-    if(!state) return (<h3>Loading...</h3>);
+  if(!state) return (<h3>Loading...</h3>);
 
-  const pollOptions = poll.options.map((opt, i) => {
-    return (
-        <div>
-            <h1>{state.poll.question}</h1>
-            <p>{state.vote.count} votes counted</p>
-            <Box mb={3}>
-                <FormControl component='voteOptionsForm'>
-                    <RadioGroup name='voteRadioGroup' onChange={(e) => setSelected(e.target.value)}>
-                        {pollOptions}
-                    </RadioGroup>
-                </FormControl>
-            </Box>
-
-            <Button
-                onClick={() => {pollSocket.sendEvent('vote', {userId:props.userId, pollId:props.pollId, vote:selected})}}
-                // disabled={!validateForm()}
-                variant="contained"
-                disabled={state.vote.voted || selected < 0}
-            >
-                Vote
-            </Button>
-            
-            {props.admin && <Button
-                onClick={() => {pollSocket.sendEvent('close_poll', {userId:props.userId, pollId:props.pollId})}}
-                // disabled={!validateForm()}
-                variant="contained"
-            >
-                Close Poll
-            </Button>}
-
-        </div>
-    );
-  });
+  const pollOptions = state.poll.options.map((opt, i) => { return(
+      <div>
+          <FormControlLabel key={`optKey${i}`}
+              value={`${i}`} 
+              disabled={state.vote.voted !== false ? true : false} 
+              control={<Radio />} 
+              label={opt} />
+      </div>
+  )});
 
   return (
-    <div>
-      <h1>{poll.question}</h1>
-      <p>{voteCount} votes counted</p>
-      <Box mb={3}>
-        <FormControl component="voteOptionsForm">
-          <RadioGroup
-            name="voteRadioGroup"
-            onChange={(e) => setSelected(e.target.value)}
+      <div>
+          <h1>{state.poll.question}</h1>
+          <p>{state.vote.count} votes counted</p>
+          <Box mb={3}>
+              <FormControl component='voteOptionsForm'>
+                  <RadioGroup name='voteRadioGroup' onChange={(e) => setSelected(e.target.value)}>
+                      {pollOptions}
+                  </RadioGroup>
+              </FormControl>
+          </Box>
+
+          <Button
+              onClick={() => {pollSocket.sendEvent('vote', {userId:props.userId, pollId:props.pollId, vote:selected})}}
+              // disabled={!validateForm()}
+              variant="contained"
+              disabled={state.vote.voted || selected < 0}
           >
-            {pollOptions}
-          </RadioGroup>
-        </FormControl>
-      </Box>
+              Vote
+          </Button>
+          
+          {props.admin && <Button
+              onClick={() => {pollSocket.sendEvent('close_poll', {userId:props.userId, pollId:props.pollId})}}
+              // disabled={!validateForm()}
+              variant="contained"
+          >
+              Close Poll
+          </Button>}
 
-      <Button
-        onClick={() => {
-          pollSocket.sendEvent("vote", {
-            userId: props.userId,
-            pollId: props.pollId,
-            vote: selected,
-          });
-        }}
-        // disabled={!validateForm()}
-        variant="contained"
-      >
-        Vote
-      </Button>
-
-      {props.admin && (
-        <Button
-          onClick={() => {
-            pollSocket.sendEvent("close_poll", {
-              userId: props.userId,
-              pollId: props.pollId,
-            });
-          }}
-          // disabled={!validateForm()}
-          variant="contained"
-        >
-          Close Poll
-        </Button>
-      )}
-    </div>
+      </div>
   );
-};
+}
 
 export default Vote;

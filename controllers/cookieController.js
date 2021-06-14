@@ -4,8 +4,9 @@ const cookieController = {};
 
 cookieController.createCookie = (req, res, next) => {
   try {
-    if (res.locals.verified) {
-      res.cookie("ssid", res.locals.user);
+    if(res.locals.id) {
+      console.log('Set cookie: ', res.locals.id)
+      res.cookie("ssid", res.locals.id);
     }
     next();
   } catch (err) {

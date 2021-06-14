@@ -66,6 +66,7 @@ export default function Login(props) {
 
   // check if redirect has data attached, if so, redirect to path provided in redirect.tabs
   if (redirect) {
+    console.log(redirect.tabs)
     if (props.match.params.pollId) {
       return (
         <Redirect
@@ -80,7 +81,7 @@ export default function Login(props) {
       <Redirect
         to={{
           pathname: redirect.tabs,
-          state: {},
+          state: { userId: username },
         }}
       />
     );

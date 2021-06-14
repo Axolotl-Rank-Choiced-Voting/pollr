@@ -40,12 +40,12 @@ const Vote = (props) => {
                   .then(() => {
                       pollSocket.addListener(listener);
                       // pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
-                      pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
+                      pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId, guest:props.guest});
                   });
           }
           else {
               pollSocket.addListener(listener);
-              pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId});
+              pollSocket.sendEvent('subscribe', {userId:props.userId, pollId:props.pollId, guest:props.guest});
           }
       }
       connect();
@@ -76,7 +76,7 @@ const Vote = (props) => {
           </Box>
 
           <Button
-              onClick={() => {pollSocket.sendEvent('vote', {userId:props.userId, pollId:props.pollId, vote:selected})}}
+              onClick={() => {pollSocket.sendEvent('vote', {userId:props.userId, pollId:props.pollId, vote:selected, guest:props.guest})}}
               // disabled={!validateForm()}
               variant="contained"
               disabled={state.vote.voted || selected < 0}

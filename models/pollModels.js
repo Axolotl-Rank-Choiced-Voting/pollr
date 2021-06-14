@@ -23,7 +23,6 @@ console.log("Inside the Mongoose connection");
 const userSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
-  pollCreator: Boolean,
   pollsList: [{ type: Schema.Types.ObjectId, ref: "Poll" }],
 });
 
@@ -47,6 +46,7 @@ const pollSchema = new Schema({
       vote: Number,
     },
   ],
+  joined: [String],
   winner: {
     option: String,
     count: Number,

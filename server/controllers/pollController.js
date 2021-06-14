@@ -60,6 +60,8 @@ pollController.getInformation = async (req, res, next) => {
       error: "Bad poll id request",
   });
   
+  if(!currPoll.active) next({error: 'poll has already been closed'});
+
   currPoll.joined.push(req.userId);
   await currPoll.save();
   res.locals = currPoll._doc;

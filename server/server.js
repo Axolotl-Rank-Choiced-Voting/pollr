@@ -45,9 +45,9 @@ app.use(express.static(path.join(__dirname, "../dist")));
 
 app.get("/login", sessionController.isLoggedIn, (req, res) => {
   if (res.locals.isLoggedIn) {
-    res.status(200).json({ tabs: "/landing" });
+    res.status(200).json({ tabs: "/landing", userId:res.locals.userId });
   }
-  res.status(200).json({ tabs: "/" });
+  else res.status(200).json({ tabs: "/login" });
 });
 
 //Authentication

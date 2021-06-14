@@ -20,6 +20,7 @@ userController.createUser = (req, res, next) => {
       const newUser = await models.User.create(user);
       //check on this later
       res.locals.userId = req.body.username;
+      res.locals.id = newUser._id;
       next();
     });
   } catch (err) {
@@ -34,14 +35,15 @@ userController.verifyUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     //(find) checks for user with input username
-    const user = await models.User.find({ username: username });
+    const user = await models.User.findOne({ username: username });
+    if(!user) return next();
     //compare plaintext input password with password in db
-    // console.log("user", user);
-    bcrypt.compare(password, user[0].password, (err, results) => {
+    bcrypt.compare(password, user.password, (err, results) => {
       if (err) console.log(`bcrypt error ${err}`);
       res.locals.verified = results;
       console.log("Login results", results);
       res.locals.userId = username;
+      res.locals.id = user._id;
       // console.log("res.locals.user", res.locals.user);
       next();
     });

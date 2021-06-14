@@ -1,22 +1,26 @@
-const models = require("../models/sessionModels");
+const {Session}= require("../models/sessionModels");
 
 const sessionController = {};
 
 sessionController.createSession = async (req, res, next) => {
   try {
-    const existingSession = await models.Session.find({
-      sessionId: res.locals.user,
+    if(!res.locals.id) return next();
+    const existingSession = await Session.findOne({
+      sessionId: res.locals.id,
     });
-    console.log("res.locals.user", res.locals.user);
-    console.log("existing session", existingSession);
-    if (existingSession[0]) {
-      //ask michael why the balls return fixes our bug
+    console.log("res.locals.userId: ", res.locals.userId);
+    console.log("existing session: ", existingSession ? true : false);
+    if(existingSession) {
+      res.locals.userId = existingSession.userId;
       return next();
     }
+    console.log(res.locals);
     const session = {
-      sessionId: res.locals.user,
+      sessionId: res.locals.id,
+      userId: res.locals.userId,
     };
-    models.Session.create(session);
+    await Session.create(session);
+    console.log('created session: ', session.sessionId);
     next();
   } catch (err) {
     next({
@@ -26,21 +30,22 @@ sessionController.createSession = async (req, res, next) => {
   }
 };
 
-sessionController.isLoggedIn = (req, res, next) => {
+sessionController.isLoggedIn = async (req, res, next) => {
   //find a session with sessionId of req.cookies
   try {
-    const session = models.Session.find(req.cookies.ssid);
-    if (session[0]) {
+    if(!req.cookies.ssid) return next();
+    const session = await Session.findOne({sessionId: req.cookies.ssid});
+    if (session) {
       // res.status(200).sendFile(path.join(__dirname, '../index.html')).send();
       // res.render(path.join(__dirname, '../index.html'), {tabs: home})
       res.locals.isLoggedIn = true;
-      next();
+      res.locals.userId = session.userId;
+      return next();
     } else {
-      console.log("got here");
-      next();
+      return next();
     }
   } catch (err) {
-    next({
+    return next({
       log: "ERROR from sessionController.isLoggedIn",
       message: { err: `Did not search for session properly ERROR: ${err}` },
     });

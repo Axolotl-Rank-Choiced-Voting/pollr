@@ -17,12 +17,19 @@ const Session = (props) => {
   if(!loading) return (
     <h3>loading</h3>
   );
+  
+  console.log(props);
+  let pollId;
+  if(props.match.params.pollId) {
+    pollId=props.match.params.pollId;
+    if(loading.tabs === '/landing') loading.tabs = '/vote';
+  }
 
   return (
     <Redirect
         to={{
           pathname: loading.tabs,
-          state: { userId: loading.userId },
+          state: { userId: loading.userId, pollId },
         }}
       />
   );

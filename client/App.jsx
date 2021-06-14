@@ -12,13 +12,13 @@ export default function App() {
   return (
     <main>
       <Switch>
-        <Route path="/" component={Session} exact />
+        <Route path="/" render={(props) => <Session {...props} />} exact />
         <Route path="/login" render={(props) => <Login {...props}/>} exact />
         <Route path="/landing" render={(props) => <Landing {...props} />} exact />
         <Route path="/vote" render={(props) => <Vote {...props} />} exact />
         <Route
           path="/poll/:pollId"
-          render={(props) => <Login {...props} />}
+          render={(props) => <Session {...props} />}
           exact
         />
       </Switch>

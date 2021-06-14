@@ -17,6 +17,12 @@ async function getLastIndex() {
 }
 getLastIndex();
 
+pollController.getPolls = async (req, res, next) => {
+  const polls = await Poll.find({});
+  res.locals.polls = polls;
+  return next();
+};
+
 pollController.createPoll = async (req, res, next) => {
   console.log(req.body);
 

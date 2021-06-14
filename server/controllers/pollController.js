@@ -17,47 +17,64 @@ async function getLastIndex() {
 }
 getLastIndex();
 
-pollController.createPoll = async (req, res, next) => {
-  console.log(req.body);
-
-  await Poll.create({
-    method: "highestVote",
-    question: req.body.pollName,
-    options: req.body.optionNames,
-    creatorId: req.body.userId.toString(),
-    pollId: currIndex.toString(),
-    voteCount: 0,
-    joined: [],
-    responses: [],
-    winner: {
-      option: "",
-      count: 0,
-    },
-    active: true,
-  });
-
-  res.locals.pollId = currIndex;
-  res.locals.link = serverLink + currIndex;
-  res.locals.admin = true;
-  currIndex++;
+pollController.getPolls = async (req, res, next) => {
+  const id = req.params.id;
+  const polls = await Poll.find({ joined: { $in: [id] } });
+  res.locals.polls = polls;
   return next();
+};
+
+pollController.createPoll = async (req, res, next) => {
+  try {
+    console.log(req.body);
+
+    await Poll.create({
+      method: "highestVote",
+      question: req.body.pollName,
+      options: req.body.optionNames,
+      creatorId: req.body.userId,
+      pollId: currIndex.toString(),
+      voteCount: 0,
+      joined: [],
+      responses: [],
+      winner: {
+        option: "",
+        count: 0,
+      },
+      active: true,
+    });
+
+    res.locals.pollId = currIndex;
+    res.locals.link = serverLink + currIndex;
+    res.locals.admin = true;
+    currIndex++;
+    return next();
+  } catch (err) {
+    return next({
+      log: "Error in pollController.createPoll: " + err,
+      message: { error: "Database error: " + err },
+    });
+  }
 };
 
 // Websocket server middleware
 
 pollController.getInformation = async (req, res, next) => {
   const currPoll = await Poll.findOne({ pollId: req.pollId });
-  if (!currPoll) return next({
+  if (!currPoll)
+    return next({
       error: "Bad poll id request",
-  });
-  
+    });
+
+  if (!currPoll.active) next({ error: "poll has already been closed" });
+
   currPoll.joined.push(req.userId);
   await currPoll.save();
   res.locals = currPoll._doc;
 
-  if(!req.guest) {
-    const user = await User.findOne({username: req.userId})
-    if(!user) return next({error: 'couldnt find user name: ' + req.userId});
+  if (!req.guest) {
+    const user = await User.findOne({ username: req.userId });
+    if (!user) return next({ error: "couldnt find user name: " + req.userId });
     user.pollsList.push(currPoll._id);
     await user.save();
   }

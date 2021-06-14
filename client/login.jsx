@@ -87,46 +87,48 @@ export default function Login(props) {
   }
 
   return (
-    <form>
-      <h1>Log In</h1>
-      <Box mb={3}>
-        <div>
-          <TextField
-            onSubmit={handleSubmit}
-            type="text"
-            value={username}
-            onChange={(e) => setUserName(e.target.value)}
-            label="username"
-            variant="outlined"
-          />
-        </div>
-      </Box>
-      <Box mb={3}>
-        <div>
-          <TextField
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            label="password"
-            variant="outlined"
-          />
-        </div>
-      </Box>
-      <Button
-        onClick={() => signUp()}
-        disabled={!validateForm()}
-        variant="contained"
-      >
-        Sign Up
-      </Button>
-      <Button
-        onClick={() => login()}
-        disabled={!validateForm()}
-        variant="contained"
-      >
-        Login
-      </Button>
-      {props.match.params.pollId && <GuestLogIn {...props} />}
-    </form>
+    <div>
+      <form>
+        <h1>Log In</h1>
+        <Box m={2}>
+          <div>
+            <TextField
+              onSubmit={handleSubmit}
+              type="text"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
+              label="username"
+              variant="outlined"
+            />
+          </div>
+        </Box>
+        <Box m={2}>
+          <div>
+            <TextField
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              label="password"
+              variant="outlined"
+            />
+          </div>
+        </Box>
+        <Button
+          onClick={() => signUp()}
+          disabled={!validateForm()}
+          variant="contained"
+        >
+          Sign Up
+        </Button>
+        <Button
+          onClick={() => login()}
+          disabled={!validateForm()}
+          variant="contained"
+        >
+          Login
+        </Button>
+      </form>
+        {props.match.params.pollId && <GuestLogIn {...props} />}
+    </div>
   );
 }

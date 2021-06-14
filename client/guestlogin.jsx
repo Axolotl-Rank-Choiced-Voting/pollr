@@ -7,14 +7,14 @@ import { Link, Redirect } from "react-router-dom";
 
 export default function GuestLogIn(props) {
   const [guestName, setGuestName] = useState("");
+  const [goToVote, setGoToVote] = useState(false);
 
   // form validation; guestname needs to be > one char
   function validateForm() {
     return guestName.length > 0;
   }
 
-  const goToPoll = () => {
-    console.log(props.match.params.pollId);
+  if (goToVote) {
     return (
       <Redirect
         to={{
@@ -23,33 +23,35 @@ export default function GuestLogIn(props) {
         }}
       />
     );
-  };
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
   }
 
   return (
-    <form>
-      <Box mb={3}>
-        <div>
-          <TextField
-            onSubmit={handleSubmit}
-            type="text"
-            value={guestName}
-            onChange={(e) => setGuestName(e.target.value)}
-            label="guest name"
-            variant="outlined"
-          />
-        </div>
-      </Box>
-      <Button
-        onClick={() => goToPoll()}
-        disabled={!validateForm()}
-        variant="contained"
-      >
-        Continue to Poll
-      </Button>
-    </form>
+    <div>
+      <form>
+        <Box m={2}>
+          <div>
+            <TextField
+              onSubmit={handleSubmit}
+              type="text"
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              label="guest name"
+              variant="outlined"
+            />
+          </div>
+        </Box>
+        <Button
+          onClick={() => setGoToVote(true)}
+          disabled={!validateForm()}
+          variant="contained"
+        >
+          Continue to Poll
+        </Button>
+      </form>
+    </div>
   );
 }

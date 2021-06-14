@@ -44,7 +44,7 @@ export default function Landing(props) {
     // create delete icon for all options if there are more than 2 options
     let deleteIcon = totalOptions > 2 ? true : false;
     optionsArray.push(
-      <Box mb={3}>
+      <Box m={2}>
         <span>
           <TextField
             key={`OptionText${i}`}
@@ -123,7 +123,7 @@ export default function Landing(props) {
         <a href="#">Log Out</a>
       </div>
       <form>
-        <Box mb={3}>
+        <Box m={2}>
           <div>
             <TextField
               id="pollname"

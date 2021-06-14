@@ -14,9 +14,11 @@ mongoose
     // sets the name of the DB that our collections are part of
     dbName: "Pollr",
   })
-  .then(() => console.log("Connected to Mongo DB."))
-  .catch((err) => console.log(err))
-  console.log("Inside the Mongoose connection")
+  .then(async () => {
+    console.log("Connected to Mongo DB.");
+  })
+  .catch((err) => console.log(err));
+console.log("Inside the Mongoose connection");
 
 const userSchema = new Schema({
   username: { type: String, required: true },
@@ -28,9 +30,28 @@ const userSchema = new Schema({
 const User = mongoose.model("User", userSchema);
 
 const pollSchema = new Schema({
-  pollQuestion: String,
-  pollOptions: Array,
-  pollResponse: String,
+  method: { type: String, required: true },
+  question: { type: String, required: true },
+  options: [String],
+  creatorId: {
+    // type: Schema.Types.ObjectId,
+    type: String,
+    // ref: "User",
+    required: true,
+  },
+  pollId: { type: String, required: true },
+  voteCount: Number,
+  responses: [
+    {
+      userId: String,
+      vote: Number,
+    },
+  ],
+  winner: {
+    option: String,
+    count: Number,
+  },
+  active: Boolean,
 });
 
 const Poll = mongoose.model("Poll", pollSchema);
